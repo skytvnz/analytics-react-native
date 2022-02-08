@@ -14,7 +14,7 @@ import type { Logger } from './logger';
 import type { DestinationPlugin, PlatformPlugin, Plugin } from './plugin';
 import { InjectContext } from './plugins/Context';
 import { SegmentDestination } from './plugins/SegmentDestination';
-import type { Settable, Storage, Watchable } from './storage';
+import type { DeepLinkData, Settable, Storage, Watchable } from './storage';
 import { Timeline } from './timeline';
 import {
   Config,
@@ -118,6 +118,8 @@ export class SegmentClient {
    */
   readonly userInfo: Watchable<UserInfoState>;
 
+  readonly deepLinkData: Watchable<DeepLinkData>;
+
   /**
    * Returns the plugins currently loaded in the timeline
    * @param ofType Type of plugins, defaults to all
@@ -198,6 +200,11 @@ export class SegmentClient {
     this.events = {
       get: this.store.events.get,
       onChange: this.store.events.onChange,
+    };
+
+    this.deepLinkData = {
+      get: this.store.deepLinkData.get,
+      onChange: this.store.deepLinkData.onChange,
     };
   }
 
@@ -385,15 +392,27 @@ export class SegmentClient {
   }
 
   private async trackDeepLinks() {
-    const url = await Linking.getInitialURL();
+    if (this.getConfig().trackDeepLinks) {
+      const deepLinkProperties = this.store.deepLinkData.get();
 
-    if (url && this.getConfig().trackDeepLinks) {
+      console.log('deep link hit', 'url', deepLinkProperties.url);
+      this.trackDeepLinkEvent(deepLinkProperties);
+
+      this.store.deepLinkData.onChange(() => {
+        this.trackDeepLinkEvent(deepLinkProperties);
+      });
+    }
+  }
+
+  private trackDeepLinkEvent(deepLinkProperties: DeepLinkData) {
+    if (deepLinkProperties.url !== '') {
       const event = createTrackEvent({
         event: 'Deep Link Opened',
         properties: {
-          url,
+          ...deepLinkProperties,
         },
       });
+
       this.process(event);
       this.logger.info('TRACK (Deep Link Opened) event saved', event);
     }

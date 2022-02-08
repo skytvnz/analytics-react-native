@@ -10,10 +10,14 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.sovranreactnative.Sovran;
+import android.util.Log;
 
 import com.segmentanalyticsreactnative.AnalyticsReactNativePackage;
 
 public class MainApplication extends Application implements ReactApplication {
+
+  private Sovran sovran = new Sovran();
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -51,6 +55,11 @@ public class MainApplication extends Application implements ReactApplication {
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager()); // Remove this line if you don't want Flipper enabled
   }
 
+  @Override
+  public  void onActivityCreated(Activity activity) {
+    trackDeepLinks(activity);
+  }
+
   /**
    * Loads Flipper in React Native templates.
    *
@@ -77,5 +86,34 @@ public class MainApplication extends Application implements ReactApplication {
         e.printStackTrace();
       }
     }
+  }
+
+  private  void trackDeepLinks(Activity activity) {
+    Intent intent = activity.getIntent();
+    if (intent == null || intent.getData() == null) {
+      return;
+    }
+
+    Properties properties = new Properties();
+
+    Uri referrer = Utils.getReferrer(activity)
+      if (referrer != null) {
+        properties.putReferrer(referrer.toString());
+      }
+
+    Uri uri = intent.getData();
+      try {
+        for (String parameter : uri.getQueryParameterNames()) {
+          String value = uri.getQueryParameter(parameter);
+          if (value != null && !value.trim().isEmpty()) {
+            properties.put(parameter, value);
+          }
+        }
+      } catch (Exception e) {
+        Log.i(e);
+      }
+
+      properties.put("url", uri.toString());
+      sovran.dispatch("add-deepLink-data", properties);
   }
 }

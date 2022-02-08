@@ -12,6 +12,8 @@
 #import <React/RCTRootView.h>
 #import "RNBootSplash.h"
 @import AdSupport;
+@import React;
+@import sovran_react_native;
 
 @implementation AppDelegate
 
@@ -30,6 +32,18 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView];
+  
+  return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL: (NSURL *)url
+            options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+  
+  NSString *url_string = url.absoluteString;
+  NSString *referring_application = options[UIApplicationOpenURLOptionsSourceApplicationKey] ?: @"";
+
+  [Sovran dispatchWithAction:@"add-deepLink-data" payload:@{ @"referring_application": referring_application, @"url":url_string}];
   
   return YES;
 }

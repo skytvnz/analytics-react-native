@@ -1,4 +1,8 @@
-import { createStore, Store } from '@segment/sovran-react-native';
+import {
+  createStore,
+  registerBridgeStore,
+  Store,
+} from '@segment/sovran-react-native';
 import type {
   SegmentAPIIntegrations,
   IntegrationSettings,
@@ -7,7 +11,7 @@ import type {
   Context,
   UserInfoState,
 } from '..';
-import type { Storage } from './types';
+import type { Storage, DeepLinkData } from './types';
 
 type Data = {
   isReady: boolean;
@@ -30,12 +34,30 @@ const INITIAL_VALUES: Data = {
   },
 };
 
+const deepLinkData = createStore<DeepLinkData>({
+  referring_application: '',
+  url: '',
+});
+
+const addDeepLinkData = (deepLinkData: DeepLinkData) => () => ({
+  referring_application: deepLinkData.referring_application,
+  url: deepLinkData.url,
+});
+
+registerBridgeStore({
+  store: deepLinkData,
+  actions: {
+    'add-deepLink-data': addDeepLinkData,
+  },
+});
+
 export class SovranStorage implements Storage {
   private storeId: string;
   private contextStore: Store<{ context: DeepPartial<Context> }>;
   private settingsStore: Store<{ settings: SegmentAPIIntegrations }>;
   private eventsStore: Store<{ events: SegmentEvent[] }>;
   private userInfoStore: Store<{ userInfo: UserInfoState }>;
+  private deepLinkStore: Store<DeepLinkData> = deepLinkData;
 
   constructor(storeId: string) {
     this.storeId = storeId;
@@ -127,5 +149,11 @@ export class SovranStorage implements Storage {
         userInfo: { ...state.userInfo, ...value },
       }));
     },
+  };
+
+  readonly deepLinkData = {
+    get: () => this.deepLinkStore.getState(),
+    onChange: (callback: (value: DeepLinkData) => void) =>
+      this.deepLinkStore.subscribe(callback),
   };
 }
