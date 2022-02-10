@@ -1,4 +1,4 @@
-import type { Storage } from '../../storage';
+import type { DeepLinkData, Storage } from '../../storage';
 import type {
   Context,
   DeepPartial,
@@ -132,6 +132,16 @@ export class MockSegmentStore implements Storage {
     set: (value: UserInfoState) => {
       this.data.userInfo = value;
       this.callbacks.userInfo.run(value);
+    },
+  };
+
+  readonly deepLinkData = {
+    get: () => ({
+      referring_application: '',
+      url: '',
+    }),
+    onChange: (_callback: (value: DeepLinkData) => void) => {
+      return () => {};
     },
   };
 }

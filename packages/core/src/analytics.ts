@@ -1,4 +1,4 @@
-import { AppState, AppStateStatus, Linking } from 'react-native';
+import { AppState, AppStateStatus } from 'react-native';
 import type { Unsubscribe } from '@segment/sovran-react-native';
 import { getContext } from './context';
 

@@ -39,10 +39,15 @@ const deepLinkData = createStore<DeepLinkData>({
   url: '',
 });
 
-const addDeepLinkData = (deepLinkData: DeepLinkData) => () => ({
-  referring_application: deepLinkData.referring_application,
-  url: deepLinkData.url,
-});
+const addDeepLinkData = (deepLinkData: DeepLinkData) => () => {
+  console.warn('addDeepLinkData', deepLinkData);
+  return {
+    referring_application: deepLinkData.referring_application,
+    url: deepLinkData.url,
+  };
+};
+
+console.warn('registerBridgeStore');
 
 registerBridgeStore({
   store: deepLinkData,

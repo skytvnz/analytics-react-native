@@ -15,6 +15,9 @@
 @import React;
 @import sovran_react_native;
 
+@import React;
+@import sovran_react_native;
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -32,6 +35,9 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"LaunchScreen" rootView:rootView];
+  
+//  [Sovran dispatchWithAction:@"send-message" payload:@"Hola mundo"];
+  // [Sovran dispatchWithAction:@"add-deepLink-data" payload:@{ @"referring_application": @"test", @"url":@"test"}];
   
   return YES;
 }

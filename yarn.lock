@@ -2705,7 +2705,7 @@
     conventional-recommended-bump "^6.1.0"
     prepend-file "^2.0.0"
 
-"@segment/sovran-react-native@^0.2.3":
+"@segment/sovran-react-native@0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@segment/sovran-react-native/-/sovran-react-native-0.2.3.tgz#25f73cdd3df896b872a465f368fe7d0d03196c9e"
   integrity sha512-6Xsz7RllJBoHtDt7dxQDgfIUxjhoCosmDZgj0BHaEjElxFmx+RnAnSa5zvtpOSF2G1/YUcrtUZidRgUnY+dJVQ==

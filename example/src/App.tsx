@@ -26,6 +26,31 @@ import { Logger } from './plugins/Logger';
 import { IdfaPlugin } from '@segment/analytics-react-native-plugin-idfa';
 // @ts-ignore
 import { AmplitudeSessionPlugin } from '@segment/analytics-react-native-plugin-amplitude-session';
+// import { NativeEventEmitter, NativeModules } from 'react-native';
+// import { createStore, registerBridgeStore } from '@segment/sovran-react-native';
+
+// interface MessageStore {
+//   message?: string;
+// }
+
+// const testSovran = createStore<MessageStore>({ message: undefined });
+// registerBridgeStore({
+//   store: testSovran,
+//   actions: {
+//     'send-message': (message: string) => (_store: MessageStore) => ({
+//       message,
+//     }),
+//   },
+// });
+
+// const Sovran = NativeModules.Sovran;
+
+// const { ON_STORE_ACTION } = Sovran.getConstants();
+
+// const SovranBridge = new NativeEventEmitter(Sovran);
+// SovranBridge.addListener(ON_STORE_ACTION, (event) => {
+//   console.warn('my bridge: ', event);
+// });
 
 const segmentClient = createClient({
   writeKey: 'QKoI2cHIPlixGDB358Y3T86tVqpaBZK3',
@@ -36,6 +61,7 @@ const segmentClient = createClient({
 });
 
 const LoggerPlugin = new Logger();
+
 segmentClient.add({ plugin: LoggerPlugin });
 
 // To test the Firebase plugin make sure to add your own API_KEY in example/ios/GoogleService-Info.plist
@@ -97,6 +123,12 @@ const App = () => {
   React.useEffect(() => {
     RNBootSplash.hide();
   }, []);
+
+  // React.useEffect(() => {
+  //   testSovran.subscribe((store) => {
+  //     console.warn(store.message);
+  //   });
+  // });
 
   const [routeName, setRouteName] = useState('Unknown');
 
