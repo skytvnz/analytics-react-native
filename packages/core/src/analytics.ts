@@ -394,6 +394,7 @@ export class SegmentClient {
   private async trackDeepLinks() {
     if (this.getConfig().trackDeepLinks) {
       const deepLinkProperties = this.store.deepLinkData.get();
+      console.log('DLProps', deepLinkProperties);
 
       console.log('deep link hit', 'url', deepLinkProperties.url);
       this.trackDeepLinkEvent(deepLinkProperties);
