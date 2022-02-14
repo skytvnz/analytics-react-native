@@ -15,7 +15,7 @@ import java.util.Hashtable;
 
 public class MainActivity extends ReactActivity {
 
-  private Sovran sovran = new Sovran();
+ Sovran sovran = MainApplication.sovran;
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
@@ -30,7 +30,6 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     RNBootSplash.init(R.drawable.bootsplash, MainActivity.this);
-    System.out.println("*************HELLO WENXI*******************");
     trackDeepLinks(this);
 
   }
@@ -38,15 +37,15 @@ public class MainActivity extends ReactActivity {
   @Override
   protected  void  onResume() {
     super.onResume();
-    Log.i("ReactNativeJS", "XXXXXXXXONRESUMEXXXXXXX")
+    Log.i("ReactNativeJS", "XXXXXXXXONRESUMEXXXXXXX");
     trackDeepLinks(this);
   }
 
   public void trackDeepLinks(Activity activity) {
     Intent intent = activity.getIntent();
-//    if (intent == null || intent.getData() == null) {
-//      return;
-//    }
+    if (intent == null || intent.getData() == null) {
+      return;
+    }
 
     Hashtable<String, String> properties = new Hashtable<>();
 
@@ -59,11 +58,11 @@ public class MainActivity extends ReactActivity {
 
     Uri uri = intent.getData();
     try {
+      properties.put("url", uri.toString());
       for (String parameter : uri.getQueryParameterNames()) {
         String value = uri.getQueryParameter(parameter);
         if (value != null && !value.trim().isEmpty()){
-          String url = value.toString();
-          properties.put("url", url);
+          properties.put(parameter, value);
         }
       }
     } catch (Exception e) {

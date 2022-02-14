@@ -10,10 +10,12 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
+import com.sovranreactnative.Sovran;
 import com.segmentanalyticsreactnative.AnalyticsReactNativePackage;
 
 public class MainApplication extends Application implements ReactApplication {
+
+  public static Sovran sovran = new Sovran();
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -29,7 +31,6 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for AnalyticsReactNativeExample:
           // packages.add(new MyReactNativePackage());
           packages.add(new AnalyticsReactNativePackage());
-
           return packages;
         }
 
@@ -38,6 +39,10 @@ public class MainApplication extends Application implements ReactApplication {
           return "index";
         }
       };
+
+//  public static Sovran getSovran() {
+//    return sovran;
+//  }
 
   @Override
   public ReactNativeHost getReactNativeHost() {
