@@ -8,17 +8,20 @@ import android.util.Log;
 import android.os.Build;
 
 import com.facebook.react.ReactActivity;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.sovranreactnative.Sovran;
+import com.sovranreactnative.SovranModule;
 import com.zoontek.rnbootsplash.RNBootSplash;
 
 import java.util.Hashtable;
 
 public class MainActivity extends ReactActivity {
 
- Sovran sovran = MainApplication.sovran;
+  Sovran sovran = MainApplication.sovran;
 
   /**
-   * Returns the name of the main component registered from JavaScript. This is used to schedule
+   * Returns the name of the main component registered from JavaScript. This is
+   * used to schedule
    * rendering of the component.
    */
   @Override
@@ -35,7 +38,7 @@ public class MainActivity extends ReactActivity {
   }
 
   @Override
-  protected  void  onResume() {
+  protected void onResume() {
     super.onResume();
     Log.i("ReactNativeJS", "XXXXXXXXONRESUMEXXXXXXX");
     trackDeepLinks(this);
@@ -61,17 +64,19 @@ public class MainActivity extends ReactActivity {
       properties.put("url", uri.toString());
       for (String parameter : uri.getQueryParameterNames()) {
         String value = uri.getQueryParameter(parameter);
-        if (value != null && !value.trim().isEmpty()){
+        if (value != null && !value.trim().isEmpty()) {
           properties.put(parameter, value);
         }
       }
     } catch (Exception e) {
-      //handle error
+      // handle error
       System.out.println(e);
     }
     Log.i("ReactNativeJS", "XXXXXXXXXXXXTRACKDLXXXXXXXXX");
     Log.i("ReactNativeJS", properties.toString());
     System.out.println("*************DLDDLDLDLDLDL*******************");
+    ReactApplicationContext context = (ReactApplicationContext) getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
+    SovranModule sovran = context.getNativeModule(SovranModule.class);
     sovran.dispatch("add-deepLink-data", properties);
   }
 
@@ -84,6 +89,3 @@ public class MainActivity extends ReactActivity {
     }
   }
 }
-
-
-
