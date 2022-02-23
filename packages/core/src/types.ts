@@ -129,8 +129,7 @@ export type Config = {
 
 export type ClientMethods = {
   screen: (name: string, properties?: JsonMap) => void;
-  track: (event: string, properties?: JsonMap) => void;
-  trackTs: (event: string, timestamp: string, properties?: JsonMap) => void;
+  track: (event: string, properties?: JsonMap, timestamp?: string) => void;
   identify: (userId: string, userTraits?: UserTraits) => void;
   flush: () => Promise<void>;
   group: (groupId: string, groupTraits?: GroupTraits) => void;
