@@ -17,13 +17,16 @@ import {
 export const createTrackEvent = ({
   event,
   properties = {},
+  timestamp,
 }: {
   event: string;
   properties?: JsonMap;
+  timestamp?: string;
 }): TrackEventType => ({
   type: EventType.TrackEvent,
   event,
   properties,
+  timestamp,
 });
 
 export const createScreenEvent = ({
@@ -91,7 +94,7 @@ export const applyRawEventData = (
     ...event,
     anonymousId: userInfo.anonymousId,
     messageId: getUUID(),
-    timestamp: new Date().toISOString(),
+    timestamp: event.timestamp || new Date().toISOString(),
     integrations: event.integrations ?? {},
     userId:
       isAliasEvent(event) || isIdentifyEvent(event)

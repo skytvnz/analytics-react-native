@@ -465,10 +465,11 @@ export class SegmentClient {
     this.logger.info('SCREEN event saved', event);
   }
 
-  track(eventName: string, options?: JsonMap) {
+  track(eventName: string, options?: JsonMap, timestamp?: string) {
     const event = createTrackEvent({
       event: eventName,
       properties: options,
+      timestamp,
     });
 
     this.process(event);
